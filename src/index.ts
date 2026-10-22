@@ -16,3 +16,5 @@ export * from './rendering/export-report.js';
 export * from './recommender.js';
 export { encodeWAV, encodeWAVAsync, audioBufferToBlob } from './utils/encoder.js';
 export type { EncodeWAVOptions, EncodeWAVAsyncOptions } from './utils/encoder.js';
+export { decodeWAV } from './utils/wav-decoder.js';
+export type { DecodedWav } from './utils/wav-decoder.js';

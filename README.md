@@ -7,8 +7,37 @@ extracted as a standalone package. No audio ever leaves the machine: the engine
 runs entirely in your browser, in a Web Worker, or in Node.
 
 ```bash
-npm install astra-mastering
+npm install @tradade/astra-mastering
 ```
+
+---
+
+## CLI
+
+The package ships a CLI so you can master a file without writing any code:
+
+```bash
+npx astra-mastering track.wav
+```
+
+```
+input        track.wav (3m 12s, 2ch, 44100 Hz, 24-bit)
+input level  -18.42 LUFS, true peak -6.02 dBTP
+output       track-mastered.wav (24-bit)
+output level -14.00 LUFS (pre-normalize -16.90)
+```
+
+Common options:
+
+```bash
+astra-mastering track.wav --lufs -9 --true-peak -0.5   # loud, modern master
+astra-mastering track.wav --recommend                  # use the rule-based recommendation
+astra-mastering track.wav --json                       # machine-readable report
+astra-mastering track.wav -o master.wav --bit-depth 16 # 16-bit output
+astra-mastering track.wav --no-normalize --no-limit    # bypass stages
+```
+
+Run `astra-mastering --help` for the full list.
 
 ---
 
@@ -33,7 +62,7 @@ yours to set, and the output is bit-for-bit reproducible.
 ### Mastering a buffer
 
 ```ts
-import { runMasteringChain, analyzeAudioBuffer } from 'astra-mastering';
+import { runMasteringChain, analyzeAudioBuffer } from '@tradade/astra-mastering';
 
 const analysis = analyzeAudioBuffer(buffer);
 
@@ -60,7 +89,7 @@ console.log(`pre-normalize ${preNormalizeLufs.toFixed(2)} LUFS → final ${measu
 ### Rendering to WAV with a validation report
 
 ```ts
-import { renderOfflineWithReport } from 'astra-mastering';
+import { renderOfflineWithReport } from '@tradade/astra-mastering';
 
 const { wavData, report } = await renderOfflineWithReport(audioBuffer, settings, onProgress, {
   inputAnalysis: analysis,
@@ -78,7 +107,7 @@ report.warnings;                   // e.g. "target not reached"
 ### Rule-based recommendations
 
 ```ts
-import { recommendMasteringSettings } from 'astra-mastering';
+import { recommendMasteringSettings } from '@tradade/astra-mastering';
 
 const { settings, source, confidence } = recommendMasteringSettings(analysis);
 // source: 'rule_based'
@@ -91,7 +120,7 @@ and a confidence score, never applies anything behind your back.
 
 ## API
 
-### DSP — `astra-mastering/dsp`
+### DSP — `@tradade/astra-mastering/dsp`
 
 Pure sample processing. No DOM, no Web Audio nodes.
 
@@ -126,6 +155,7 @@ Pure sample processing. No DOM, no Web Audio nodes.
 | `validateRenderedBuffer(buffer)` | Measure a rendered buffer |
 | `encodeWAV(buffer, sampleRate, bitDepth, options?)` | WAV encoding (16/24-bit, dither) |
 | `encodeWAVAsync(...)` | Same, with progress and cancellation |
+| `decodeWAV(bytes)` | WAV decoding → `IAudioBuffer` (8/16/24/32-bit PCM, 32-bit float) |
 
 ### Settings
 

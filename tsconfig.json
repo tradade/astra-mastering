@@ -4,6 +4,7 @@
     "lib": ["ES2023", "DOM"],
     "module": "esnext",
     "moduleResolution": "bundler",
+    "types": ["node"],
 
     /* Emit a consumable library. Tests are type-checked by tsconfig.test.json
        but never emitted into dist/. */

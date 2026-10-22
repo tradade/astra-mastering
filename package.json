@@ -1,12 +1,15 @@
 {
-  "name": "astra-mastering",
-  "version": "0.1.0",
-  "description": "Deterministic, local-first audio mastering engine — pure DSP, no DOM required.",
+  "name": "@tradade/astra-mastering",
+  "version": "0.1.1",
+  "description": "Deterministic, local-first audio mastering engine \u2014 pure DSP, no DOM required.",
   "license": "MIT",
   "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "bin": {
+    "astra-mastering": "./dist/cli.js"
+  },
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -52,10 +55,14 @@
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
+    "@types/node": "^24.12.3",
     "eslint": "^10.3.0",
     "globals": "^17.6.0",
     "typescript": "~6.0.2",
     "typescript-eslint": "^8.59.2",
     "vitest": "^1.4.0"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
