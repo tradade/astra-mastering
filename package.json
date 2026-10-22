@@ -1,0 +1,61 @@
+{
+  "name": "astra-mastering",
+  "version": "0.1.0",
+  "description": "Deterministic, local-first audio mastering engine — pure DSP, no DOM required.",
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./dsp": {
+      "types": "./dist/dsp/index.d.ts",
+      "import": "./dist/dsp/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "sideEffects": false,
+  "engines": {
+    "node": ">=20"
+  },
+  "keywords": [
+    "audio",
+    "mastering",
+    "dsp",
+    "lufs",
+    "limiter",
+    "equalizer",
+    "dynamics",
+    "browser",
+    "web-audio"
+  ],
+  "scripts": {
+    "build": "tsc -b",
+    "dev": "tsc -b --watch",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "eslint . --quiet",
+    "typecheck": "tsc -b --noEmit false --emitDeclarationOnly false",
+    "prepublishOnly": "pnpm build"
+  },
+  "dependencies": {
+    "fft.js": "^4.0.4"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.3.0",
+    "globals": "^17.6.0",
+    "typescript": "~6.0.2",
+    "typescript-eslint": "^8.59.2",
+    "vitest": "^1.4.0"
+  }
+}
