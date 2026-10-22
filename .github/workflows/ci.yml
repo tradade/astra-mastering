@@ -12,8 +12,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
-        with:
-          version: 11
       - uses: actions/setup-node@v4
         with:
           node-version: 22
@@ -35,12 +33,11 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
+      # Required for npm trusted publishing (OIDC) and for provenance.
       id-token: write
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
-        with:
-          version: 11
       - uses: actions/setup-node@v4
         with:
           node-version: 22
@@ -48,7 +45,21 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm build
-      - name: Publish
-        run: pnpm publish --no-git-checks --access public
+      - name: Publish if version is new
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_CONFIG_PROVENANCE: true
+        run: |
+          PKG=$(node -p "require('./package.json').name")
+          VER=$(node -p "require('./package.json').version")
+          PUBLISHED=$(npm view "${PKG}@${VER}" version 2>/dev/null || true)
+          if [ "$PUBLISHED" = "$VER" ]; then
+            echo "${PKG}@${VER} is already published on npm — nothing to do."
+            exit 0
+          fi
+          # Trusted publishing (OIDC) needs npm >= 11.5.1; Node 22 ships npm 10.x.
+          npm install -g npm@latest
+          if [ -n "$NPM_TOKEN" ]; then
+            export NODE_AUTH_TOKEN="$NPM_TOKEN"
+          fi
+          npm publish --access public --provenance
